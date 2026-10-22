@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skydar Support</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1c1c1e;
+    --muted: #5f6368;
+    --accent: #0a5c7a;
+    --card: #f2f5f8;
+    --rule: #e3e3e6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #050b1e;
+      --text: #ececee;
+      --muted: #a1a8b5;
+      --accent: #5fe3ff;
+      --card: #0e1730;
+      --rule: #1e2a45;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 48px 20px 64px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 4px; }
+  h2 { font-size: 1.2rem; margin: 36px 0 8px; color: var(--accent); }
+  h3 { font-size: 1rem; margin: 20px 0 4px; }
+  p { margin: 0 0 12px; }
+  ul { padding-left: 22px; margin: 0 0 12px; }
+  li { margin: 0 0 6px; }
+  .tagline { color: var(--muted); margin-bottom: 28px; }
+  .contact { background: var(--card); border-radius: 14px; padding: 18px 20px; margin: 24px 0; }
+  .contact p { margin: 0; }
+  a { color: var(--accent); }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0 16px; }
+  .footer { color: var(--muted); font-size: 15px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Skydar Support</h1>
+  <p class="tagline">Point your iPhone at any light in the sky and find out what it is — a plane, a satellite, the ISS, a planet or a star.</p>
+
+  <!-- TODO: replace skydarapp@icloud.com with Skydar's support address (here and in privacy.html). -->
+  <div class="contact">
+    <p><strong>Need help or have feedback?</strong> Email <a href="mailto:skydarapp@icloud.com">skydarapp@icloud.com</a> and include your iPhone model and iOS version if you're reporting a problem. We usually reply within a few days.</p>
+  </div>
+
+  <h2>Frequently asked questions</h2>
+
+  <h3>The labels don't line up with what I see in the sky.</h3>
+  <p>Skydar places labels using your iPhone's compass and motion sensors, so it's only as accurate as they are. To improve it:</p>
+  <ul>
+    <li>Calibrate the compass: move your iPhone slowly in a figure-eight a few times.</li>
+    <li>Keep away from metal, cars and magnets. MagSafe wallets, magnetic mounts and some cases can throw the compass off by several degrees.</li>
+    <li>Hold the phone upright and still for a moment after you point it.</li>
+  </ul>
+  <p>A label within a few degrees of the object is normal; aim the crosshair at the light and Skydar identifies the closest match.</p>
+
+  <h3>Why don't I see any planes?</h3>
+  <p>Plane positions come from a free, community-run network of ADS-B receivers, so coverage varies by area and some aircraft (often military or private) don't broadcast. The free feed also limits how often each connection can ask for data; if you see "Flight limit reached" at the top of the Sky view, planes come back at the time shown.</p>
+
+  <h3>Skydar shows a satellite, but I can't see it.</h3>
+  <p>Satellites are only visible when they're lit by the Sun while your sky is dark, usually in the couple of hours after sunset and before sunrise. Each satellite's card shows its estimated brightness; fainter ones need a dark sky away from city lights, or binoculars.</p>
+
+  <h3>The Sky view says "Starlink unavailable" or the satellite data is old.</h3>
+  <p>Satellite orbits come from CelesTrak, which only allows each download when new data has been published. Skydar keeps working with saved data in the meantime and catches up automatically — no action needed.</p>
+
+  <h3>I didn't get a pass alert.</h3>
+  <p>Pass alerts are part of Skydar Pro. Check that they're turned on in Skydar's Settings (the gear in Tonight or Deep Space), that notifications are allowed for Skydar in the iPhone Settings app, and that Background App Refresh is on. Skydar only alerts for passes you can actually see: the satellite must be sunlit against a dark sky, climb at least 20° above the horizon, and be at least as bright as your chosen setting.</p>
+
+  <h3>What's included in Skydar Pro?</h3>
+  <p>Pass alerts for the ISS, Tiangong, bright satellites and Starlink trains; Lock Screen and Dynamic Island countdowns; alerts for naked-eye comets and asteroids passing closer than the Moon; the 7-night "best night this week" forecast; and the crewed-mission Lock Screen tracker. Identifying anything in the sky, Find it, tonight's stargazing score, comets and asteroids, and the Deep Space tab are free.</p>
+
+  <h3>How do I manage or cancel Skydar Pro?</h3>
+  <p>Subscriptions are handled by Apple. In Skydar, open Settings and tap Manage subscription, or on your iPhone open Settings, tap your name, then Subscriptions. Canceling keeps Pro until the end of the period you've paid for.</p>
+
+  <h3>I subscribed on another device. How do I get Pro here?</h3>
+  <p>Make sure you're signed in with the same Apple Account, then open Skydar's Settings and tap Restore purchases.</p>
+
+  <h3>Why does Skydar ask for my location, camera and motion?</h3>
+  <ul>
+    <li><strong>Location</strong> works out where planes, satellites, planets and stars are in your sky, and when passes happen where you are.</li>
+    <li><strong>Camera</strong> shows the live sky behind the labels. Video is never recorded, saved or sent anywhere.</li>
+    <li><strong>Motion</strong> tells Skydar which way your phone is pointing.</li>
+  </ul>
+  <p>Without the camera or motion, you can still drag around the sky map.</p>
+
+  <h3>Where does the data come from?</h3>
+  <p>Satellite orbits from CelesTrak; live aircraft from adsb.lol; flight routes from adsbdb; comets, asteroids and spacecraft distances from NASA JPL; live antenna activity from NASA's Deep Space Network; and the stargazing forecast from Apple Weather.</p>
+
+  <h2>Privacy</h2>
+  <p>Skydar has no accounts, ads, analytics or tracking. Read the full <a href="privacy.html">Privacy Policy</a>.</p>
+
+  <hr>
+  <p class="footer">Skydar by Cameron Brenneise · Weather data by <a href="https://weatherkit.apple.com/legal-attribution.html">Apple Weather</a></p>
+</main>
+</body>
+</html>
