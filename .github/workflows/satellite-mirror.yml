@@ -1,0 +1,73 @@
+# Mirrors CelesTrak's satellite orbits for the Skydar app.
+#
+# CelesTrak allows each internet address one download per data update (every 2 hours). Phones on cellular share
+# addresses with thousands of others, so the app was often refused. This downloads each group once per update and
+# publishes it as assets on the "satellite-data" release, which the app reads with no per-address limit.
+# Only the fields the app uses are kept, compressed with raw DEFLATE (Starlink: 4.7 MB ‚Üí ~0.5 MB).
+
+name: Satellite data mirror
+
+on:
+  schedule:
+    - cron: "20 */2 * * *"   # CelesTrak updates every 2 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write   # publish release assets
+  actions: write    # keep this schedule from being paused for inactivity
+
+concurrency:
+  group: satellite-mirror
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download from CelesTrak
+        run: |
+          mkdir -p out
+          python3 - <<'EOF'
+          import json, urllib.request, zlib
+
+          KEYS = ["OBJECT_NAME", "OBJECT_ID", "NORAD_CAT_ID", "EPOCH", "MEAN_MOTION", "ECCENTRICITY",
+                  "INCLINATION", "RA_OF_ASC_NODE", "ARG_OF_PERICENTER", "MEAN_ANOMALY", "BSTAR"]
+
+          for group in ["stations", "visual", "starlink"]:
+              url = f"https://celestrak.org/NORAD/elements/gp.php?GROUP={group}&FORMAT=json"
+              request = urllib.request.Request(url, headers={"User-Agent": "SkydarMirror/1.0 (+https://skydarapp.github.io/SkydarApp/)"})
+              try:
+                  body = urllib.request.urlopen(request, timeout=60).read()
+                  records = json.loads(body)
+                  assert isinstance(records, list) and records
+              except Exception as error:
+                  # CelesTrak answers "GP data has not updated‚Ä¶" as plain text; keep the previous asset.
+                  print(f"{group}: skipped ({error})")
+                  continue
+              compact = json.dumps([{k: r[k] for k in KEYS if k in r} for r in records], separators=(",", ":")).encode()
+              deflate = zlib.compressobj(9, zlib.DEFLATED, -15)
+              data = deflate.compress(compact) + deflate.flush()
+              with open(f"out/{group}.json.deflate", "wb") as f:
+                  f.write(data)
+              print(f"{group}: {len(records)} satellites, {len(data):,} bytes")
+          EOF
+
+      - name: Publish to the satellite-data release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if ! ls out/*.deflate >/dev/null 2>&1; then echo "Nothing new to publish"; exit 0; fi
+          gh release view satellite-data >/dev/null 2>&1 || \
+            gh release create satellite-data --title "Satellite data" --latest=false \
+              --notes "Orbits mirrored from CelesTrak every 2 hours for the Skydar app. Updated automatically."
+          gh release upload satellite-data out/*.deflate --clobber
+
+      - name: Keep the schedule running
+        # GitHub pauses scheduled workflows after 60 days without commits; re-enabling resets that clock.
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh api -X PUT "repos/$GH_REPO/actions/workflows/satellite-mirror.yml/enable" || true
